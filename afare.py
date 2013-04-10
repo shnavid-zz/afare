@@ -72,15 +72,15 @@ from_airport = "SFO"
 from_date = date(year=2013, month=5, day=30)
 to_airport = "CLO"
 to_date = date(year=2013, month=6, day=16)
-csv_fname = "prices-{from}-{to}-{from_date}-{to_date}.csv".format(
-    **{'from': from_airport, 'to': to_airport, 'from_date': from_date,
-      'to_date': to_date})
+params = {'from_airport': from_airport, 'to_airport': to_airport,
+          'from_date': from_date, 'to_date': to_date}
+csv_fname = "prices-{from_airport}-{to_airport}-{from_date}-{to_date}.csv".\
+    format(**params)
 
 with open(csv_fname, "a") as fp:
     while True:
         try:
-            price = get_fare(from_airport=from_airport, to_airport=to_airport,
-                             from_date=from_date, to_date=to_date)
+            price = get_fare(**params)
         except Exception, e:
             print(e)
             sleep(60)
