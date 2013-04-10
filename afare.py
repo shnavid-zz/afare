@@ -72,20 +72,24 @@ from_airport = "SFO"
 from_date = date(year=2013, month=5, day=30)
 to_airport = "CLO"
 to_date = date(year=2013, month=6, day=16)
+csv_fname = "prices-{from}-{to}-{from_date}-{to_date}.csv".format(
+    **{'from': from_airport, 'to': to_airport, 'from_date': from_date,
+      'to_date': to_date})
 
-with open("prices-{from}-{to}-{from_date}-{to_date}.csv".format(**{'from': from_airport, 'to': to_airport, 'from_date': from_date, 'to_date': to_date}), "a") as fp:
+with open(csv_fname, "a") as fp:
     while True:
         try:
-            price = get_fare(from_airport="SFO", to_airport="CLO", from_date=from_date, to_date=to_date)
-	    #price = '392892'
+            price = get_fare(from_airport=from_airport, to_airport=to_airport,
+                             from_date=from_date, to_date=to_date)
         except Exception, e:
-            print e
+            print(e)
             sleep(60)
         else:
-            print "Price: %s" % (price)
             now = datetime.now()
             today = date.today()
             days = (from_date - today).days
-            fp.write("%s,%d,%d,%d,%s\n" % (now, now.hour, now.weekday(), days, price))
+            out = "%s,%d,%d,%d,%s" % (now, now.hour, now.weekday(), days, price)
+            print(out)
+            fp.write(out + "\n")
             fp.flush()
             sleep(60 * 60)
